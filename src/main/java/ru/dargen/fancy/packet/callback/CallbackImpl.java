@@ -2,8 +2,8 @@ package ru.dargen.fancy.packet.callback;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import ru.dargen.fancy.server.FancyRemote;
 import ru.dargen.fancy.packet.Packet;
+import ru.dargen.fancy.server.FancyRemote;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -13,10 +13,10 @@ public class CallbackImpl<P extends Packet> implements Callback<P> {
 
     protected final FancyRemote remote;
     protected final String id;
-    protected CompletableFuture<P> future;
+    protected final CompletableFuture<P> future = new CompletableFuture<>();
 
     public void complete(P packet) {
-        if (future != null && !future.isDone())
+        if (!future.isDone())
             future.complete(packet);
     }
 
@@ -25,7 +25,7 @@ public class CallbackImpl<P extends Packet> implements Callback<P> {
     }
 
     public CompletableFuture<P> await() {
-        return future != null ? future : (future = new CompletableFuture<>());
+        return future;
     }
 
 }

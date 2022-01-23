@@ -18,6 +18,4 @@ public class FancyException extends RuntimeException {
         throw new FancyException(message, throwable);
     }
 
-
-
 }

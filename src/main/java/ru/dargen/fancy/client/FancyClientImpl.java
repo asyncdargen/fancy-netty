@@ -59,12 +59,12 @@ public class FancyClientImpl implements FancyClient {
                 .group(eventLoop)
                 .channel(NettyUtil.CLIENT_CHANNEL)
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 2500)
+                .option(ChannelOption.TCP_NODELAY, true)
+                .option(ChannelOption.SO_KEEPALIVE, true)
+                .option(ChannelOption.IP_TOS, 24)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     protected void initChannel(SocketChannel channel) {
                         channel.config().setAllocator(PooledByteBufAllocator.DEFAULT);
-                        channel.config().setOption(ChannelOption.IP_TOS, 24);
-                        channel.config().setOption(ChannelOption.TCP_NODELAY, true);
-                        channel.config().setOption(ChannelOption.SO_KEEPALIVE, true);
                         channel.pipeline()
                                 .addLast("codec", new HttpClientCodec())
                                 .addLast("aggregator", new HttpObjectAggregator(Integer.MAX_VALUE))

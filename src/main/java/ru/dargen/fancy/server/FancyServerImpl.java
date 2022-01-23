@@ -66,13 +66,16 @@ public class FancyServerImpl implements FancyServer {
         return channelFuture = new ServerBootstrap()
                 .channel(NettyUtil.SERVER_CHANNEL)
                 .group(eventLoop, NettyUtil.EVENT_LOOP.get())
-                .option(ChannelOption.TCP_NODELAY, true)
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 2500)
-                .option(ChannelOption.SO_KEEPALIVE, true)
-                .option(ChannelOption.IP_TOS, 24)
+//                .option(ChannelOption.TCP_NODELAY, true)
+//                .option(ChannelOption.SO_KEEPALIVE, true)
+//                .option(ChannelOption.IP_TOS, 24)
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     protected void initChannel(SocketChannel channel) throws Exception {
                         channel.config().setAllocator(PooledByteBufAllocator.DEFAULT);
+                        channel.config().setOption(ChannelOption.TCP_NODELAY, true);
+                        channel.config().setOption(ChannelOption.SO_KEEPALIVE, true);
+                        channel.config().setOption(ChannelOption.IP_TOS, 24);
                         FancyRemote remote = new FancyRemoteImpl(FancyServerImpl.this, new CallbackProviderImpl(), channel);
                         SocketAddress address = remote.getAddress();
                         channel.pipeline().addLast(

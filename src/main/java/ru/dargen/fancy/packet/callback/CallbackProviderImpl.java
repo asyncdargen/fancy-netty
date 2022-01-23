@@ -3,8 +3,8 @@ package ru.dargen.fancy.packet.callback;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.RemovalNotification;
-import ru.dargen.fancy.server.FancyRemote;
 import ru.dargen.fancy.packet.Packet;
+import ru.dargen.fancy.server.FancyRemote;
 import ru.dargen.fancy.util.FancyException;
 
 import java.util.concurrent.CompletableFuture;

@@ -39,9 +39,13 @@ public class FancyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
     }
 
     protected void channelRead0(ChannelHandlerContext ctx, WebSocketFrame msg) throws Exception {
-//        remote.getEventLoop().execute(() -> {
+        if (!(msg instanceof TextWebSocketFrame))
+            return;
+
+        String text = ((TextWebSocketFrame) msg).text();
+
+        remote.getEventLoop().execute(() -> {
             try {
-                String text = ((TextWebSocketFrame) msg).text();
                 JsonObject json = remote.getGson().fromJson(text, JsonObject.class);
 
                 int typeId = json.getAsJsonPrimitive("type").getAsInt();
@@ -62,7 +66,7 @@ public class FancyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
             } catch (Throwable e) {
                 remote.getLogger().log(Level.SEVERE, "Exception while read packet", e);
             }
-//        });
+        });
     }
 
 }

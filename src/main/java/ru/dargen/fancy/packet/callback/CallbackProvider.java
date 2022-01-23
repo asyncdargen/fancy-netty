@@ -17,7 +17,7 @@ public interface CallbackProvider {
         return create(
                 remote, UUID.randomUUID().toString()
                         .replace("-", "")
-                        .substring(0, 10)
+                        .substring(0, 16)
         );
     }
 
