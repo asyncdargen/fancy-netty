@@ -38,8 +38,8 @@ public class CallbackProviderImpl implements CallbackProvider {
         Callback<Packet> callback = get(id);
         if (callback != null) {
             try {
-                callback.complete(packet);
                 remove(id);
+                callback.complete(packet);
                 return true;
             } catch (Throwable e) {
                 throw new FancyException("Exception while complete callback, id " + callback.getId(), e);

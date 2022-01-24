@@ -58,7 +58,7 @@ public class Fancy {
         return new HandlersImpl();
     }
 
-    public PacketRegistryImpl createDefaultPacketRegistry() {
+    public PacketRegistry createDefaultPacketRegistry() {
         return new PacketRegistryImpl();
     }
 

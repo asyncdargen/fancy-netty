@@ -38,7 +38,7 @@ publishing {
         version(MavenPublication) {
             groupId "ru.dargen"
             artifactId "fancy-netty"
-            version "1.2.1"
+            version "1.2.2"
             artifact jar
         }
         live(MavenPublication) {

@@ -10,11 +10,8 @@ import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.experimental.UtilityClass;
-import ru.dargen.fancy.packet.Packet;
 
-import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
