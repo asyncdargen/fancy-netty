@@ -20,7 +20,7 @@ public class PacketRegistryImpl implements PacketRegistry {
         for (Class<? extends Packet> type : types) {
             if (!type.isAnnotationPresent(Packet.Id.class))
                 throw new IllegalArgumentException("packet class not annotated");
-            register(type.getAnnotation(Packet.Id.class).id, type);
+            register(type.getAnnotation(Packet.Id.class).value(), type);
         }
     }
 

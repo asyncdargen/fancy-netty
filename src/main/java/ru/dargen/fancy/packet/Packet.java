@@ -11,11 +11,11 @@ public interface Packet {
 
     void handle(FancyRemote remote, String id);
 
-    @Target(ElementType.METHOD)
+    @Target(ElementType.TYPE)
     @Retention(RetentionPolicy.RUNTIME)
     public static @interface Id {
 
-        int id = -1;
+        int value();
 
     }
 }
