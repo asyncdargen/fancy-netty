@@ -15,6 +15,15 @@ public class PacketRegistryImpl implements PacketRegistry {
         REGISTRY_TYPE2ID.put(type, id);
     }
 
+    //for annotated packets
+    public void register(Class<? extends Packet>... types) {
+        for (Class<? extends Packet> type : types) {
+            if (!type.isAnnotationPresent(Packet.Id.class))
+                throw new IllegalArgumentException("packet class not annotated");
+            register(type.getAnnotation(Packet.Id.class).id, type);
+        }
+    }
+
     public int getPacketIdFromType(Class<? extends Packet> type) {
         return REGISTRY_TYPE2ID.getOrDefault(type, -1);
     }
