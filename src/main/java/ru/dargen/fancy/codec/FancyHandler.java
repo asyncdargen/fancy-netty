@@ -69,4 +69,8 @@ public class FancyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
         });
     }
 
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        remote.getLogger().log(Level.SEVERE, "Exception caught", cause);
+    }
+
 }

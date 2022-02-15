@@ -1,8 +1,9 @@
 package ru.dargen.fancy.packet.callback;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.RemovalNotification;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.RemovalCause;
+import com.github.benmanes.caffeine.cache.Scheduler;
 import ru.dargen.fancy.packet.Packet;
 import ru.dargen.fancy.server.FancyRemote;
 import ru.dargen.fancy.util.FancyException;
@@ -12,8 +13,8 @@ import java.util.concurrent.TimeUnit;
 
 public class CallbackProviderImpl implements CallbackProvider {
 
-    protected Cache<String, Callback<?>> callbackCache = CacheBuilder.newBuilder()
-            .concurrencyLevel(3)
+    protected Cache<String, Callback<?>> callbackCache = Caffeine.newBuilder()
+            .scheduler(Scheduler.systemScheduler())
             .removalListener(this::handleExpire)
             .expireAfterWrite(1, TimeUnit.MINUTES)
             .build();
@@ -48,8 +49,7 @@ public class CallbackProviderImpl implements CallbackProvider {
         return false;
     }
 
-    protected void handleExpire(RemovalNotification<String, Callback<?>> notify) {
-        Callback<?> callback = notify.getValue();
+    protected void handleExpire(String id, Callback<?> callback, RemovalCause cause) {
         closeCallback(callback);
     }
 
