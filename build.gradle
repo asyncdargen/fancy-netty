@@ -12,10 +12,10 @@ repositories {
 }
 
 dependencies {
-    implementation 'io.netty:netty-all:4.1.63.Final'
-    implementation 'com.github.ben-manes.caffeine:caffeine:2.9.0'
-    implementation 'com.google.guava:guava:30.1.1-jre'
-    implementation 'com.google.code.gson:gson:2.8.6'
+    compile 'io.netty:netty-all:4.1.63.Final'
+    compile 'com.github.ben-manes.caffeine:caffeine:2.9.0'
+    compile 'com.google.guava:guava:30.1.1-jre'
+    compile 'com.google.code.gson:gson:2.8.6'
 
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     compileOnly 'org.projectlombok:lombok:1.18.12'
@@ -27,10 +27,10 @@ dependencies {
 publishing {
     repositories {
         maven {
-            url 'https://repo.dargen.space/public'
+            url 'http://repo.starfarm.fun/public'
             credentials {
-                username System.getenv('DARGEN_REPO_USER')
-                password System.getenv('DARGEN_REPO_PASSWORD')
+                username System.getenv('SF_REPO_USER')
+                password System.getenv('SF_REPO_PASSWORD')
             }
         }
     }
@@ -39,7 +39,7 @@ publishing {
         version(MavenPublication) {
             groupId "ru.dargen"
             artifactId "fancy-netty"
-            version "1.3"
+            version "1.4"
             artifact jar
         }
         live(MavenPublication) {
