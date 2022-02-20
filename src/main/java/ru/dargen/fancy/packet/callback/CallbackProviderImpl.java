@@ -25,6 +25,7 @@ public class CallbackProviderImpl implements CallbackProvider {
 
     public <P extends Packet> Callback<P> remove(String id) {
         Callback<P> callback = get(id);
+        callbackCache.invalidate(id);
         closeCallback(callback);
         return callback;
     }
@@ -39,9 +40,8 @@ public class CallbackProviderImpl implements CallbackProvider {
         Callback<Packet> callback = get(id);
         if (callback != null) {
             try {
-                remove(id);
-                callback.complete(packet);
-                return true;
+                callbackCache.invalidate(id);
+                return callback.complete(packet);
             } catch (Throwable e) {
                 throw new FancyException("Exception while complete callback, id " + callback.getId(), e);
             }

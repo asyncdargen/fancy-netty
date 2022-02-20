@@ -13,11 +13,14 @@ public class CallbackImpl<P extends Packet> implements Callback<P> {
 
     protected final FancyRemote remote;
     protected final String id;
-    protected final CompletableFuture<P> future = new CompletableFuture<>();
+    protected CompletableFuture<P> future;
 
-    public void complete(P packet) {
-        if (!future.isDone())
+    public boolean complete(P packet) {
+        if (future != null && !future.isDone()) {
             future.complete(packet);
+            return true;
+        }
+        return false;
     }
 
     public <T extends Packet> Callback<T> respond(Packet packet) {
@@ -25,7 +28,7 @@ public class CallbackImpl<P extends Packet> implements Callback<P> {
     }
 
     public CompletableFuture<P> await() {
-        return future;
+        return future = new CompletableFuture<>();
     }
 
 }

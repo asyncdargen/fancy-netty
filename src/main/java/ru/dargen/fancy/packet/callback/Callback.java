@@ -17,7 +17,7 @@ public interface Callback<P extends Packet> {
 
     CompletableFuture<P> getFuture();
 
-    void complete(P packet);
+    boolean complete(P packet);
 
     <T extends Packet> Callback<T> respond(Packet packet);
 
