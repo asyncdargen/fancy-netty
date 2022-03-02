@@ -27,7 +27,7 @@ dependencies {
 publishing {
     repositories {
         maven {
-            url 'http://repo.starfarm.fun/public'
+            url 'http://repo.starfarm.fun/private'
             credentials {
                 username System.getenv('SF_REPO_USER')
                 password System.getenv('SF_REPO_PASSWORD')
@@ -39,7 +39,7 @@ publishing {
         version(MavenPublication) {
             groupId "ru.dargen"
             artifactId "fancy-netty"
-            version "1.5"
+            version "1.6"
             artifact jar
         }
         live(MavenPublication) {
