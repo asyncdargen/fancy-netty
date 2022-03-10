@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 public interface Packet {
 
-    void handle(FancyRemote remote, String id);
+    default void handle(FancyRemote remote, String id) {}
 
     @Target(ElementType.TYPE)
     @Retention(RetentionPolicy.RUNTIME)

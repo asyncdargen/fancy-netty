@@ -1,20 +1,11 @@
 package ru.dargen.fancy.packet.registry;
 
 import com.google.common.reflect.ClassPath;
-import lombok.SneakyThrows;
 import ru.dargen.fancy.packet.Packet;
 import ru.dargen.fancy.util.FancyException;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-import java.util.jar.JarInputStream;
 
 public class PacketRegistryImpl implements PacketRegistry {
 
