@@ -24,6 +24,8 @@ public class FancyRemoteImpl implements FancyRemote {
     protected final CallbackProvider callbackProvider;
     protected final SocketChannel channel;
 
+    protected boolean throwInactive = false;
+
     public Logger getLogger() {
         return server.getLogger();
     }
@@ -55,7 +57,9 @@ public class FancyRemoteImpl implements FancyRemote {
 
     public <P extends Packet> Callback<P> write(Packet packet) {
         if (!isActive())
-            throw new IllegalStateException("Remote inactive");
+            if (throwInactive)
+                throw new IllegalStateException("Remote inactive");
+            else return null;
 
         Callback<P> callback = callbackProvider.create(this);
 
@@ -71,7 +75,9 @@ public class FancyRemoteImpl implements FancyRemote {
 
     public <P extends Packet> Callback<P> write(Packet packet, String id) {
         if (!isActive())
-            throw new IllegalStateException("Remote inactive");
+            if (throwInactive)
+                throw new IllegalStateException("Remote inactive");
+            else return null;
 
         Callback<P> callback = callbackProvider.create(this, id);
 

@@ -47,6 +47,7 @@ public class FancyClientImpl implements FancyClient {
 
     protected Channel channel;
     protected boolean autoReconnect = true;
+    protected boolean throwInactive = false;
 
     protected String host;
     protected int port;
@@ -94,7 +95,6 @@ public class FancyClientImpl implements FancyClient {
                         if (autoReconnect) {
                             getLogger().info("Auto reconnect in 1.5 seconds");
                             eventLoop.schedule(this::reconnect, 1500, TimeUnit.MILLISECONDS);
-                            reconnect();
                         }
                     }
                 });
@@ -110,7 +110,8 @@ public class FancyClientImpl implements FancyClient {
             while (!isActive())
                 try {
                     lock.wait();
-                } catch (InterruptedException e) {}
+                } catch (InterruptedException e) {
+                }
         }
     }
 
@@ -127,7 +128,9 @@ public class FancyClientImpl implements FancyClient {
 
     public <P extends Packet> Callback<P> write(Packet packet) {
         if (!isActive())
-            throw new IllegalStateException("Remote inactive");
+            if (throwInactive)
+                throw new IllegalStateException("Remote inactive");
+            else return null;
 
         Callback<P> callback = callbackProvider.create(this);
 
@@ -143,7 +146,9 @@ public class FancyClientImpl implements FancyClient {
 
     public <P extends Packet> Callback<P> write(Packet packet, String id) {
         if (!isActive())
-            throw new IllegalStateException("Remote inactive");
+            if (throwInactive)
+                throw new IllegalStateException("Remote inactive");
+            else return null;
 
         Callback<P> callback = callbackProvider.create(this, id);
 
