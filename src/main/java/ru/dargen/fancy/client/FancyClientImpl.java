@@ -137,8 +137,10 @@ public class FancyClientImpl implements FancyClient {
         if (getHandlers().handleOutPacket(this, packet)) {
             PacketContainer container = new PacketContainer(packet, callback.getId(), getPacketRegistry().getPacketIdFromType(packet.getClass()));
             container.validate();
-            String json = getGson().toJson(container);
-            channel.writeAndFlush(new TextWebSocketFrame(json));
+            eventLoop.execute(() -> {
+                String json = getGson().toJson(container);
+                channel.writeAndFlush(new TextWebSocketFrame(json));
+            });
         }
 
         return callback;
@@ -155,8 +157,10 @@ public class FancyClientImpl implements FancyClient {
         if (getHandlers().handleOutPacket(this, packet)) {
             PacketContainer container = new PacketContainer(packet, callback.getId(), getPacketRegistry().getPacketIdFromType(packet.getClass()));
             container.validate();
-            String json = getGson().toJson(container);
-            channel.writeAndFlush(new TextWebSocketFrame(json));
+            eventLoop.execute(() -> {
+                String json = getGson().toJson(container);
+                channel.writeAndFlush(new TextWebSocketFrame(json));
+            });
         }
 
         return callback;

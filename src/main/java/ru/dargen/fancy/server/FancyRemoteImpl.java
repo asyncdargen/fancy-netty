@@ -66,8 +66,10 @@ public class FancyRemoteImpl implements FancyRemote {
         if (getHandlers().handleOutPacket(this, packet)) {
             PacketContainer container = new PacketContainer(packet, callback.getId(), getPacketRegistry().getPacketIdFromType(packet.getClass()));
             container.validate();
-            String json = getGson().toJson(container);
-            channel.writeAndFlush(new TextWebSocketFrame(json));
+            getEventLoop().execute(() -> {
+                String json = getGson().toJson(container);
+                channel.writeAndFlush(new TextWebSocketFrame(json));
+            });
         }
 
         return callback;
@@ -84,8 +86,10 @@ public class FancyRemoteImpl implements FancyRemote {
         if (getHandlers().handleOutPacket(this, packet)) {
             PacketContainer container = new PacketContainer(packet, callback.getId(), getPacketRegistry().getPacketIdFromType(packet.getClass()));
             container.validate();
-            String json = getGson().toJson(container);
-            channel.writeAndFlush(new TextWebSocketFrame(json));
+            getEventLoop().execute(() -> {
+                String json = getGson().toJson(container);
+                channel.writeAndFlush(new TextWebSocketFrame(json));
+            });
         }
 
         return callback;
