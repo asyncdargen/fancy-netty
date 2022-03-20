@@ -50,7 +50,7 @@ public class CallbackProviderImpl implements CallbackProvider {
     }
 
     protected void handleExpire(String id, Callback<?> callback, RemovalCause cause) {
-        closeCallback(callback);
+        if (cause == RemovalCause.EXPIRED) closeCallback(callback);
     }
 
     protected void closeCallback(Callback<?> callback) {
