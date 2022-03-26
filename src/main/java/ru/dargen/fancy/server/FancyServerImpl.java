@@ -74,7 +74,7 @@ public class FancyServerImpl implements FancyServer {
                     protected void initChannel(SocketChannel channel) throws Exception {
                         channel.config().setAllocator(PooledByteBufAllocator.DEFAULT);
                         channel.config().setOption(ChannelOption.TCP_NODELAY, true);
-                        channel.config().setOption(ChannelOption.SO_KEEPALIVE, true);
+//                        channel.config().setOption(ChannelOption.SO_KEEPALIVE, true);
                         channel.config().setOption(ChannelOption.IP_TOS, 24);
                         FancyRemote remote = new FancyRemoteImpl(FancyServerImpl.this, new CallbackProviderImpl(), channel);
                         SocketAddress address = remote.getAddress();

@@ -61,7 +61,7 @@ public class FancyClientImpl implements FancyClient {
                 .channel(NettyUtil.CLIENT_CHANNEL)
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 2500)
                 .option(ChannelOption.TCP_NODELAY, true)
-                .option(ChannelOption.SO_KEEPALIVE, true)
+//                .option(ChannelOption.SO_KEEPALIVE, true)
                 .option(ChannelOption.IP_TOS, 24)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     protected void initChannel(SocketChannel channel) {
