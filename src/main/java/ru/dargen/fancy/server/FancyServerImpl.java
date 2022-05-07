@@ -15,8 +15,10 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import ru.dargen.fancy.Fancy;
 import ru.dargen.fancy.codec.FancyHandler;
 import ru.dargen.fancy.handler.Handlers;
+import ru.dargen.fancy.metrics.Metrics;
 import ru.dargen.fancy.packet.Packet;
 import ru.dargen.fancy.packet.callback.Callback;
 import ru.dargen.fancy.packet.callback.CallbackProviderImpl;
@@ -38,6 +40,7 @@ public class FancyServerImpl implements FancyServer {
 
     protected final Set<FancyRemote> clients = Sets.newConcurrentHashSet();
     protected final EventLoopGroup eventLoop = NettyUtil.EVENT_LOOP.get();
+    protected final Metrics metrics = Fancy.createMetrics();
 
     protected final Logger logger;
     protected final Gson gson;
@@ -76,7 +79,7 @@ public class FancyServerImpl implements FancyServer {
                         channel.config().setOption(ChannelOption.TCP_NODELAY, true);
 //                        channel.config().setOption(ChannelOption.SO_KEEPALIVE, true);
                         channel.config().setOption(ChannelOption.IP_TOS, 24);
-                        FancyRemote remote = new FancyRemoteImpl(FancyServerImpl.this, new CallbackProviderImpl(), channel);
+                        FancyRemote remote = new FancyRemoteImpl(FancyServerImpl.this, new CallbackProviderImpl(), metrics.fork(), channel);
                         SocketAddress address = remote.getAddress();
                         channel.pipeline().addLast(
                                 new HttpServerCodec(),

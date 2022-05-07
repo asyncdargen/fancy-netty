@@ -7,6 +7,7 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import ru.dargen.fancy.handler.Handlers;
+import ru.dargen.fancy.metrics.Metrics;
 import ru.dargen.fancy.packet.Packet;
 import ru.dargen.fancy.packet.PacketContainer;
 import ru.dargen.fancy.packet.callback.Callback;
@@ -14,6 +15,7 @@ import ru.dargen.fancy.packet.callback.CallbackProvider;
 import ru.dargen.fancy.packet.registry.PacketRegistry;
 
 import java.net.SocketAddress;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 @Getter
@@ -22,6 +24,7 @@ public class FancyRemoteImpl implements FancyRemote {
 
     protected final FancyServer server;
     protected final CallbackProvider callbackProvider;
+    protected final Metrics metrics;
     protected final SocketChannel channel;
 
     protected boolean throwInactive = false;
@@ -69,6 +72,7 @@ public class FancyRemoteImpl implements FancyRemote {
             getEventLoop().execute(() -> {
                 String json = getGson().toJson(container);
                 channel.writeAndFlush(new TextWebSocketFrame(json));
+                getMetrics().incrementOutPackets(json.getBytes(StandardCharsets.UTF_8).length);
             });
         }
 
@@ -89,6 +93,7 @@ public class FancyRemoteImpl implements FancyRemote {
             getEventLoop().execute(() -> {
                 String json = getGson().toJson(container);
                 channel.writeAndFlush(new TextWebSocketFrame(json));
+                getMetrics().incrementOutPackets(json.getBytes(StandardCharsets.UTF_8).length);
             });
         }
 

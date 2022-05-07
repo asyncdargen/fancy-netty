@@ -6,6 +6,8 @@ import ru.dargen.fancy.client.FancyClient;
 import ru.dargen.fancy.client.FancyClientImpl;
 import ru.dargen.fancy.handler.Handlers;
 import ru.dargen.fancy.handler.HandlersImpl;
+import ru.dargen.fancy.metrics.Metrics;
+import ru.dargen.fancy.metrics.MetricsImpl;
 import ru.dargen.fancy.packet.registry.HandlerPacketRegistry;
 import ru.dargen.fancy.packet.registry.PacketRegistry;
 import ru.dargen.fancy.packet.registry.PacketRegistryImpl;
@@ -65,6 +67,14 @@ public class Fancy {
 
     public HandlerPacketRegistry createHandlerPacketRegistry() {
         return new HandlerPacketRegistry();
+    }
+
+    public Metrics createMetrics() {
+        return new MetricsImpl();
+    }
+
+    public Metrics createMetrics(Metrics parent) {
+        return new MetricsImpl(parent);
     }
 
 }

@@ -15,8 +15,10 @@ import io.netty.handler.codec.http.websocketx.WebSocketVersion;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import ru.dargen.fancy.Fancy;
 import ru.dargen.fancy.codec.FancyHandler;
 import ru.dargen.fancy.handler.Handlers;
+import ru.dargen.fancy.metrics.Metrics;
 import ru.dargen.fancy.packet.Packet;
 import ru.dargen.fancy.packet.PacketContainer;
 import ru.dargen.fancy.packet.callback.Callback;
@@ -27,6 +29,7 @@ import ru.dargen.fancy.util.NettyUtil;
 
 import java.net.SocketAddress;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,6 +42,7 @@ public class FancyClientImpl implements FancyClient {
     protected final Object lock = new Object();
     protected final EventLoopGroup eventLoop = NettyUtil.EVENT_LOOP.get();
     protected final CallbackProvider callbackProvider = new CallbackProviderImpl();
+    protected final Metrics metrics = Fancy.createMetrics();
 
     protected final Logger logger;
     protected final Gson gson;
@@ -140,6 +144,7 @@ public class FancyClientImpl implements FancyClient {
             eventLoop.execute(() -> {
                 String json = getGson().toJson(container);
                 channel.writeAndFlush(new TextWebSocketFrame(json));
+                getMetrics().incrementOutPackets(json.getBytes(StandardCharsets.UTF_8).length);
             });
         }
 
@@ -160,6 +165,7 @@ public class FancyClientImpl implements FancyClient {
             eventLoop.execute(() -> {
                 String json = getGson().toJson(container);
                 channel.writeAndFlush(new TextWebSocketFrame(json));
+                getMetrics().incrementOutPackets(json.getBytes(StandardCharsets.UTF_8).length);
             });
         }
 

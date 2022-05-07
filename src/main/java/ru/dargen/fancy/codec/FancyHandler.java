@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import ru.dargen.fancy.packet.Packet;
 import ru.dargen.fancy.server.FancyRemote;
 
+import java.nio.charset.StandardCharsets;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
@@ -57,12 +58,14 @@ public class FancyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
                 if (type == null)
                     throw new IllegalStateException("unknown packet type " + typeId);
 
+
                 Packet packet = remote.getGson().fromJson(packetRaw, type);
 
                 if (packet != null && remote.getHandlers().handleInPacket(remote, packet))
                     if (!remote.getCallbackProvider().completeCallback(id, packet))
                         packet.handle(remote, id);
 
+                remote.getMetrics().incrementInPackets(text.getBytes(StandardCharsets.UTF_8).length);
             } catch (Throwable e) {
                 remote.getLogger().log(Level.SEVERE, "Exception while read packet", e);
             }
