@@ -88,10 +88,12 @@ public class MetricsImpl implements Metrics {
 
     public void incrementOutPackets() {
         outPackets.incrementAndGet();
+        if (parent != null) parent.incrementOutPackets();
     }
 
     public void incrementInPackets() {
         inPackets.incrementAndGet();
+        if (parent != null) parent.incrementInPackets();
     }
 
     public void incrementOutPackets(long bytes) {
@@ -106,10 +108,12 @@ public class MetricsImpl implements Metrics {
 
     public void incrementOutBytes(long bytes) {
         outBytes.addAndGet(bytes);
+        if (parent != null) parent.incrementOutBytes(bytes);
     }
 
     public void incrementInBytes(long bytes) {
         inBytes.addAndGet(bytes);
+        if (parent != null) parent.incrementInBytes(bytes);
     }
 
     public Metrics fork() {
