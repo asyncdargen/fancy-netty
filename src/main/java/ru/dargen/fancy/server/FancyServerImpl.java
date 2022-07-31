@@ -85,7 +85,7 @@ public class FancyServerImpl implements FancyServer {
                                 new HttpServerCodec(),
                                 new HttpObjectAggregator(Integer.MAX_VALUE),
 //                                new HttpResponseEncoder(),
-                                new WebSocketServerProtocolHandler("/"),
+                                new WebSocketServerProtocolHandler("/", null, false, Integer.MAX_VALUE),
                                 new FancyHandler(remote, r -> {
                                     logger.info("Client connected from " + address);
                                     clients.add(remote);

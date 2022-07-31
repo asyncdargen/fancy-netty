@@ -1,2 +1,3 @@
-rootProject.name = 'fancy-netty'
+rootProject.name = "fancy-netty"
 
+include "kotlin"

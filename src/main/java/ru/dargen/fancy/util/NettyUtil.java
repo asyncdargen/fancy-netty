@@ -35,7 +35,7 @@ public class NettyUtil {
     public Logger LOGGER = Logger.getLogger("Fancy");
 
     static {
-        System.out.println("Using " + (EPOLL ? "Epoll" : "Nio"));
+        LOGGER.info("Using " + (EPOLL ? "Epoll" : "Nio"));
     }
 
 }

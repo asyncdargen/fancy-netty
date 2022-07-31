@@ -44,32 +44,29 @@ public class FancyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
             return;
 
         String text = ((TextWebSocketFrame) msg).text();
+        try {
+            JsonObject json = remote.getGson().fromJson(text, JsonObject.class);
 
-        remote.getEventLoop().execute(() -> {
-            try {
-                JsonObject json = remote.getGson().fromJson(text, JsonObject.class);
+            int typeId = json.getAsJsonPrimitive("type").getAsInt();
+            String id = json.getAsJsonPrimitive("id").getAsString();
+            JsonElement packetRaw = json.get("packet");
 
-                int typeId = json.getAsJsonPrimitive("type").getAsInt();
-                String id = json.getAsJsonPrimitive("id").getAsString();
-                JsonElement packetRaw = json.get("packet");
+            Class<? extends Packet> type = remote.getPacketRegistry().getPacketTypeFromId(typeId);
 
-                Class<? extends Packet> type = remote.getPacketRegistry().getPacketTypeFromId(typeId);
-
-                if (type == null)
-                    throw new IllegalStateException("unknown packet type " + typeId);
+            if (type == null)
+                throw new IllegalStateException("unknown packet type " + typeId);
 
 
-                Packet packet = remote.getGson().fromJson(packetRaw, type);
+            Packet packet = remote.getGson().fromJson(packetRaw, type);
 
-                if (packet != null && remote.getHandlers().handleInPacket(remote, packet))
-                    if (!remote.getCallbackProvider().completeCallback(id, packet))
-                        packet.handle(remote, id);
+            if (packet != null && remote.getHandlers().handleInPacket(remote, packet))
+                if (!remote.getCallbackProvider().completeCallback(id, packet))
+                    packet.handle(remote, id);
 
-                remote.getMetrics().incrementInPackets(text.getBytes(StandardCharsets.UTF_8).length);
-            } catch (Throwable e) {
-                remote.getLogger().log(Level.SEVERE, "Exception while read packet", e);
-            }
-        });
+            remote.getMetrics().incrementInPackets(text.getBytes(StandardCharsets.UTF_8).length);
+        } catch (Throwable e) {
+            remote.getLogger().log(Level.SEVERE, "Exception while read packet", e);
+        }
     }
 
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {

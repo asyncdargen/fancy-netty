@@ -1,0 +1,44 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.7.10'
+    id 'maven-publish'
+}
+
+apply plugin: 'maven-publish'
+apply plugin: 'kotlin'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly rootProject
+}
+
+publishing {
+    repositories {
+        maven {
+            url 'https://repo.starfarm.fun/public'
+            credentials {
+                username System.getenv('SF_REPO_USER')
+                password System.getenv('SF_REPO_PASSWORD')
+            }
+        }
+    }
+
+    publications {
+        live(MavenPublication) {
+            groupId "ru.dargen"
+            artifactId "fancy-netty-kt"
+            version "live"
+            artifact jar
+        }
+        version(MavenPublication) {
+            groupId "ru.dargen"
+            artifactId "fancy-netty-kt"
+            version rootProject.version
+            artifact jar
+        }
+    }
+}
+
+tasks.withType(JavaCompile)*.options*.encoding = 'UTF-8'
