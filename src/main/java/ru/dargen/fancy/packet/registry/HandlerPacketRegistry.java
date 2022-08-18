@@ -9,14 +9,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class HandlerPacketRegistry extends PacketRegistryImpl {
 
-    protected final Map<Integer, Handler<?>> REGISTRY_ID2HANDLER = new ConcurrentHashMap<>();
+    protected final Map<Integer, Handler<?>> id2Handler = new ConcurrentHashMap<>();
 
     public <P extends DataPacket> void registerHandler(Class<P> type, Handler<P> handler) {
         registerHandler(getPacketIdFromType(type), handler);
     }
 
     public <P extends DataPacket> void registerHandler(int type, Handler<P> handler) {
-        REGISTRY_ID2HANDLER.put(type, handler);
+        id2Handler.put(type, handler);
     }
 
     public <P extends DataPacket> Handler<P> getHandler(Class<P> type) {
@@ -25,7 +25,7 @@ public class HandlerPacketRegistry extends PacketRegistryImpl {
 
     @SuppressWarnings("ALL")
     public <P extends DataPacket> Handler<P> getHandler(int type) {
-        Handler handler = REGISTRY_ID2HANDLER.get(type);
+        Handler handler = id2Handler.get(type);
         if (handler == null)
             throw new FancyException("handler not finded");
         return handler;

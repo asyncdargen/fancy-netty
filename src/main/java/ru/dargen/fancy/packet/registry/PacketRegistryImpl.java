@@ -9,12 +9,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PacketRegistryImpl implements PacketRegistry {
 
-    protected final Map<Integer, Class<? extends Packet>> REGISTRY_ID2TYPE = new ConcurrentHashMap<>();
-    protected final Map<Class<? extends Packet>, Integer> REGISTRY_TYPE2ID = new ConcurrentHashMap<>();
+    protected final Map<Integer, Class<? extends Packet>> id2Type = new ConcurrentHashMap<>();
+    protected final Map<Class<? extends Packet>, Integer> type2id = new ConcurrentHashMap<>();
 
     public void register(int id, Class<? extends Packet> type) {
-        REGISTRY_ID2TYPE.put(id, type);
-        REGISTRY_TYPE2ID.put(type, id);
+        id2Type.put(id, type);
+        type2id.put(type, id);
     }
 
     //for annotated packets
@@ -26,11 +26,11 @@ public class PacketRegistryImpl implements PacketRegistry {
         }
     }
 
-    public void registerFromCurrentJar() {
-        registerFromCurrentJar(Packet.class);
+    public void registerFromCurrentClassLoader() {
+        registerFromCurrentClassLoader(Packet.class);
     }
 
-    public void registerFromCurrentJar(Class<? extends Packet> clazz) {
+    public void registerFromCurrentClassLoader(Class<? extends Packet> clazz) {
         registerFromClassLoader(Thread.currentThread().getContextClassLoader(), clazz);
     }
 
@@ -45,37 +45,17 @@ public class PacketRegistryImpl implements PacketRegistry {
                     }
                 } catch (Throwable __) {}
             }
-//            //TODO: Maybe caught exception in javac
-//            File currentJarFile = new File(PacketRegistryImpl.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-//            System.out.println(currentJarFile);
-//            JarFile jar = new JarFile(currentJarFile);
-//            Enumeration<JarEntry> enumeration = jar.entries();
-//            JarEntry entry;
-//            while (enumeration.hasMoreElements() && (entry = enumeration.nextElement()) != null) {
-//                if (!entry.getName().endsWith(".class"))
-//                    continue;
-//
-//                String path = entry.getName()
-//                        .replace("/", ".")
-//                        .replace(".class", "");
-//                try {
-//                    Class<?> clazz = loader.loadClass(path);
-//                    if (Packet.class.isAssignableFrom(clazz) && clazz.isAnnotationPresent(Packet.Id.class)) {
-//                        register(clazz.getAnnotation(Packet.Id.class).value(), (Class<? extends Packet>) clazz);
-//                    }
-//                } catch (Throwable e) {}
-//            }
         } catch (Throwable e) {
-            throw new FancyException("Error while search and register packets: " + e);
+            throw new FancyException("Error while search and register packets: ", e);
         }
     }
 
     public int getPacketIdFromType(Class<? extends Packet> type) {
-        return REGISTRY_TYPE2ID.getOrDefault(type, -1);
+        return type2id.getOrDefault(type, -1);
     }
 
     public Class<? extends Packet> getPacketTypeFromId(int id) {
-        return REGISTRY_ID2TYPE.get(id);
+        return id2Type.get(id);
     }
 
 }
