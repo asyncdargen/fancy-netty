@@ -15,7 +15,9 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import ru.dargen.fancy.Fancy;
+import ru.dargen.fancy.client.FancyClient;
 import ru.dargen.fancy.codec.FancyHandler;
 import ru.dargen.fancy.handler.Handlers;
 import ru.dargen.fancy.metrics.Metrics;
@@ -54,14 +56,17 @@ public class FancyServerImpl implements FancyServer {
         return channelFuture != null && channelFuture.channel().isActive();
     }
 
+    @SneakyThrows
     public void close() {
         if (isActive()) {
-            channelFuture.channel().close();
+            clients.forEach(FancyRemote::close);
+            channelFuture.sync().channel().close();
             channelFuture = null;
             logger.info("Server on *:" + port + " closed");
         }
     }
 
+    @SneakyThrows
     public ChannelFuture bind(int port) {
         if (isActive())
             throw new IllegalStateException("Server already bind!");

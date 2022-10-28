@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ru.dargen.fancy.Fancy;
 
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.LongAdder;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,17 +17,17 @@ public class MetricsImpl implements Metrics {
     @Getter
     private final long startTime = System.currentTimeMillis();
 
-    private final AtomicLong outPackets = new AtomicLong();
-    private final AtomicLong inPackets = new AtomicLong();
-    private final AtomicLong outBytes = new AtomicLong();
-    private final AtomicLong inBytes = new AtomicLong();
+    private final LongAdder outPackets = new LongAdder();
+    private final LongAdder inPackets = new LongAdder();
+    private final LongAdder outBytes = new LongAdder();
+    private final LongAdder inBytes = new LongAdder();
 
     public long getOutBytes() {
-        return outBytes.get();
+        return outBytes.longValue();
     }
 
     public long getInBytes() {
-        return inBytes.get();
+        return inBytes.longValue();
     }
 
     public long getIOBytes() {
@@ -35,11 +35,11 @@ public class MetricsImpl implements Metrics {
     }
 
     public long getOutPackets() {
-        return outPackets.get();
+        return outPackets.longValue();
     }
 
     public long getInPackets() {
-        return inPackets.get();
+        return inPackets.longValue();
     }
 
     public long getIOPackets() {
@@ -87,12 +87,12 @@ public class MetricsImpl implements Metrics {
     }
 
     public void incrementOutPackets() {
-        outPackets.incrementAndGet();
+        outPackets.increment();
         if (parent != null) parent.incrementOutPackets();
     }
 
     public void incrementInPackets() {
-        inPackets.incrementAndGet();
+        inPackets.increment();
         if (parent != null) parent.incrementInPackets();
     }
 
@@ -107,12 +107,12 @@ public class MetricsImpl implements Metrics {
     }
 
     public void incrementOutBytes(long bytes) {
-        outBytes.addAndGet(bytes);
+        outBytes.add(bytes);
         if (parent != null) parent.incrementOutBytes(bytes);
     }
 
     public void incrementInBytes(long bytes) {
-        inBytes.addAndGet(bytes);
+        inBytes.add (bytes);
         if (parent != null) parent.incrementInBytes(bytes);
     }
 

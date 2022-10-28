@@ -8,7 +8,9 @@ import ru.dargen.fancy.packet.registry.PacketRegistryImpl
 import ru.dargen.fancy.server.FancyRemote
 import ru.dargen.fancy.util.FancyException
 
-inline fun <reified P : DataPacket> FancyConnected.registerHandler(noinline handler: P.(FancyRemote, String) -> Unit) {
+inline fun <reified P : DataPacket> FancyConnected.registerHandler(
+    noinline handler: P.(FancyRemote, String) -> Unit
+) {
     if (packetRegistry !is HandlerPacketRegistry)
         throw FancyException("packet registry not " + HandlerPacketRegistry::class.simpleName)
     (packetRegistry as HandlerPacketRegistry).registerHandler(P::class.java, handler)
@@ -17,6 +19,15 @@ inline fun <reified P : DataPacket> FancyConnected.registerHandler(noinline hand
 inline fun <reified P : DataPacket> HandlerPacketRegistry.registerHandler(
     noinline handler: P.(FancyRemote, String) -> Unit
 ) = this.registerHandler(P::class.java, handler)
+
+inline fun <reified P : DataPacket> FancyConnected.registerResponseHandler(noinline handler: P.(FancyRemote, String) -> Packet?) {
+    registerHandler<P> { remote, id -> handler(this, remote, id)?.let { remote.write<Packet>(it, id) } }
+}
+
+inline fun <reified P : DataPacket> HandlerPacketRegistry.registerResponseHandler(noinline handler: P.(FancyRemote, String) -> Packet?) {
+    registerHandler<P> { remote, id -> handler(this, remote, id)?.let { remote.write<Packet>(it, id) } }
+}
+
 
 inline fun <reified P : Packet> PacketRegistryImpl.register(id: Int) = this.register(id, P::class.java)
 
