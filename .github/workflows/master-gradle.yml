@@ -32,14 +32,3 @@ jobs:
           SF_REPO_USER: ${{ secrets.SF_REPO_USER }}
           SF_REPO_PASSWORD: ${{ secrets.SF_REPO_PASSWORD }}
         run: chmod +x gradlew && ./gradlew :publish
-
-      - name: Publish kotlin with Gradle
-        env:
-          SF_REPO_USER: ${{ secrets.SF_REPO_USER }}
-          SF_REPO_PASSWORD: ${{ secrets.SF_REPO_PASSWORD }}
-        run: chmod +x gradlew && ./gradlew fancy-netty-kotlin:publish
-      - name: Publish spring server integration with Gradle
-        env:
-          SF_REPO_USER: ${{ secrets.SF_REPO_USER }}
-          SF_REPO_PASSWORD: ${{ secrets.SF_REPO_PASSWORD }}
-        run: chmod +x gradlew && ./gradlew fancy-netty-spring-server:publish
