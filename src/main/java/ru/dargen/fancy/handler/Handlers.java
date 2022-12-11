@@ -1,17 +1,22 @@
 package ru.dargen.fancy.handler;
 
-import ru.dargen.fancy.server.FancyRemote;
+import ru.dargen.fancy.handler.context.PacketHandlerContext;
+import ru.dargen.fancy.handler.context.RemoteConnectHandlerContext;
+import ru.dargen.fancy.handler.context.RemoteDisconnectHandlerContext;
 import ru.dargen.fancy.packet.Packet;
+import ru.dargen.fancy.server.FancyRemote;
+
+import java.util.function.Consumer;
 
 public interface Handlers {
 
-    Handlers onConnect(RemoteConnectHandler handler);
+    Handlers onConnect(Consumer<RemoteConnectHandlerContext> handler);
 
-    Handlers onDisconnect(RemoteDisconnectHandler handler);
+    Handlers onDisconnect(Consumer<RemoteDisconnectHandlerContext> handler);
 
-    Handlers onOutPacket(PacketHandler handler);
+    Handlers onOutPacket(Consumer<PacketHandlerContext> handler);
 
-    Handlers onInPacket(PacketHandler handler);
+    Handlers onInPacket(Consumer<PacketHandlerContext> handler);
 
     boolean handleConnect(FancyRemote remote);
     

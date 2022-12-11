@@ -1,5 +1,6 @@
 package ru.dargen.fancy.packet.registry;
 
+import lombok.Getter;
 import ru.dargen.fancy.packet.DataPacket;
 import ru.dargen.fancy.packet.registry.handler.Handler;
 import ru.dargen.fancy.util.FancyException;
@@ -7,6 +8,7 @@ import ru.dargen.fancy.util.FancyException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Getter
 public class HandlerPacketRegistry extends PacketRegistryImpl {
 
     protected final Map<Integer, Handler<?>> id2Handler = new ConcurrentHashMap<>();

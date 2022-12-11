@@ -58,6 +58,6 @@ public class CallbackProviderImpl implements CallbackProvider {
 
         CompletableFuture<?> handler = callback.getFuture();
         if (handler != null && !handler.isDone())
-            handler.completeExceptionally(new FancyException("time outed callback, id " + callback.getId()));
+            handler.completeExceptionally(new FancyException("Time outed callback, id " + callback.getId()));
     }
 }

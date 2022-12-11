@@ -7,11 +7,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum SizeUnit {
 
-    BYTES("b", 1),
-    KILOBYTES("kb", 1024),
-    MEGABYTES("mb", 1024 * 1024),
-    GIGABYTES("gb", 1024 * 1024 * 1024),
-    TERABYTES("tb", 1024L * 1024 * 1024 * 1024);
+    BYTES("b", 0x1L),
+    KILOBYTES("kb", 0x400L),
+    MEGABYTES("mb", 0x100000L),
+    GIGABYTES("gb", 0x40000000L),
+    TERABYTES("tb", 0x10000000000L);
 
     private final String name;
     private final long size;

@@ -1,12 +1,12 @@
 package ru.dargen.fancy.codec;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import ru.dargen.fancy.packet.Packet;
 import ru.dargen.fancy.server.FancyRemote;
 
@@ -45,11 +45,11 @@ public class FancyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
 
         String text = ((TextWebSocketFrame) msg).text();
         try {
-            JsonObject json = remote.getGson().fromJson(text, JsonObject.class);
+            val json = remote.getGson().fromJson(text, JsonObject.class);
 
-            int typeId = json.getAsJsonPrimitive("type").getAsInt();
-            String id = json.getAsJsonPrimitive("id").getAsString();
-            JsonElement packetRaw = json.get("packet");
+            val typeId = json.getAsJsonPrimitive("type").getAsInt();
+            val id = json.getAsJsonPrimitive("id").getAsString();
+            val packetJson = json.get("packet");
 
             Class<? extends Packet> type = remote.getPacketRegistry().getPacketTypeFromId(typeId);
 
@@ -57,7 +57,7 @@ public class FancyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
                 throw new IllegalStateException("unknown packet type " + typeId);
 
 
-            Packet packet = remote.getGson().fromJson(packetRaw, type);
+            val packet = remote.getGson().fromJson(packetJson, type);
 
             if (packet != null && remote.getHandlers().handleInPacket(remote, packet))
                 if (!remote.getCallbackProvider().completeCallback(id, packet))

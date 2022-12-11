@@ -17,10 +17,11 @@ public class MetricsImpl implements Metrics {
     @Getter
     private final long startTime = System.currentTimeMillis();
 
-    private final LongAdder outPackets = new LongAdder();
-    private final LongAdder inPackets = new LongAdder();
-    private final LongAdder outBytes = new LongAdder();
-    private final LongAdder inBytes = new LongAdder();
+    private final LongAdder
+            outPackets = new LongAdder(),
+            inPackets = new LongAdder(),
+            outBytes = new LongAdder(),
+            inBytes = new LongAdder();
 
     public long getOutBytes() {
         return outBytes.longValue();
@@ -112,7 +113,7 @@ public class MetricsImpl implements Metrics {
     }
 
     public void incrementInBytes(long bytes) {
-        inBytes.add (bytes);
+        inBytes.add(bytes);
         if (parent != null) parent.incrementInBytes(bytes);
     }
 

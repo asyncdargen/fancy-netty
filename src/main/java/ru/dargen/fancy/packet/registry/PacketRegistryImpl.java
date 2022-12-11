@@ -1,12 +1,14 @@
 package ru.dargen.fancy.packet.registry;
 
 import com.google.common.reflect.ClassPath;
+import lombok.Getter;
 import ru.dargen.fancy.packet.Packet;
 import ru.dargen.fancy.util.FancyException;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Getter
 public class PacketRegistryImpl implements PacketRegistry {
 
     protected final Map<Integer, Class<? extends Packet>> id2Type = new ConcurrentHashMap<>();
