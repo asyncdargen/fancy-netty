@@ -1,6 +1,9 @@
 package ru.dargen.fancy.kotlin
 
 import ru.dargen.fancy.FancyConnected
+import ru.dargen.fancy.handler.context.PacketHandlerContext
+import ru.dargen.fancy.handler.context.RemoteConnectHandlerContext
+import ru.dargen.fancy.handler.context.RemoteDisconnectHandlerContext
 import ru.dargen.fancy.packet.DataPacket
 import ru.dargen.fancy.packet.Packet
 import ru.dargen.fancy.packet.registry.HandlerPacketRegistry
@@ -31,13 +34,13 @@ inline fun <reified P : DataPacket> HandlerPacketRegistry.registerResponseHandle
 
 inline fun <reified P : Packet> PacketRegistryImpl.register(id: Int) = this.register(id, P::class.java)
 
-fun FancyConnected.onConnect(handler: FancyRemote.() -> Boolean) = this.handlers.onConnect(handler)
+fun FancyConnected.onConnect(handler: RemoteConnectHandlerContext.() -> Unit) = this.handlers.onConnect(handler)
 
-fun FancyConnected.onDisconnect(handler: FancyRemote.() -> Unit) = this.handlers.onDisconnect(handler)
+fun FancyConnected.onDisconnect(handler: RemoteDisconnectHandlerContext.() -> Unit) = this.handlers.onDisconnect(handler)
 
-fun FancyConnected.onOutPacket(handler: FancyRemote.(Packet) -> Boolean) = this.handlers.onOutPacket(handler)
+fun FancyConnected.onOutPacket(handler: PacketHandlerContext.() -> Unit) = this.handlers.onOutPacket(handler)
 
-fun FancyConnected.onInPacket(handler: FancyRemote.(Packet) -> Boolean) = this.handlers.onInPacket(handler)
+fun FancyConnected.onInPacket(handler: PacketHandlerContext.() -> Unit) = this.handlers.onInPacket(handler)
 
 fun <P : Packet> FancyRemote.writeAwait(packet: Packet, handler: P.() -> Unit) = this.write<P>(packet).await().thenAccept(handler)
 
