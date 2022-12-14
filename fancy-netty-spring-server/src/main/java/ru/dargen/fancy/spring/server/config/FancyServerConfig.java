@@ -25,10 +25,10 @@ public class FancyServerConfig {
     @Autowired
     private ApplicationContext context;
 
-    @Value("${fancy.server.port}")
+    @Value("${fancy.server.port:8080}")
     private int serverPort;
 
-    @Value("${fancy.packets.package}")
+    @Value("${fancy.packets.package:#{null}}")
     private String packetsPackage;
 
     @SneakyThrows
@@ -59,14 +59,14 @@ public class FancyServerConfig {
                 handlers(),
                 context.getBean(Gson.class)
         );
-        packetRegistry().register(getClassPathPackets().toArray(new Class[0]));
+        if (packetsPackage != null) packetRegistry().register(getClassPathPackets().toArray(new Class[0]));
         server.bind(serverPort);
         return server;
     }
 
     @Bean
     public FancyPostBeanProcessor fancyBeanPostProcessor() {
-        return new FancyPostBeanProcessor(packetRegistry());
+        return new FancyPostBeanProcessor(packetRegistry(), handlers());
     }
 
 }
