@@ -59,7 +59,9 @@ public class FancyHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
 
             val packet = remote.getGson().fromJson(packetJson, type);
 
-            if (packet != null && remote.getHandlers().handleInPacket(remote, packet))
+            val callback = remote.getCallbackProvider().get(id);
+
+            if (packet != null && remote.getHandlers().handleInPacket(remote, callback, packet))
                 if (!remote.getCallbackProvider().completeCallback(id, packet))
                     packet.handle(remote, id);
 

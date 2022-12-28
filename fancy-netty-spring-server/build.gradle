@@ -35,13 +35,6 @@ publishing {
                 password System.getenv('SF_REPO_PASSWORD')
             }
         }
-        maven {
-            url 'https://repo.dargen.space/public'
-            credentials {
-                username System.getenv('DARGEN_REPO_USER')
-                password System.getenv('DARGEN_REPO_PASSWORD')
-            }
-        }
     }
 
     publications {

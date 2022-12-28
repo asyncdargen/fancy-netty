@@ -138,7 +138,7 @@ public class FancyClientImpl implements FancyClient {
 
         Callback<P> callback = callbackProvider.create(this);
 
-        if (getHandlers().handleOutPacket(this, packet)) {
+        if (getHandlers().handleOutPacket(this, callback, packet)) {
             PacketContainer container = new PacketContainer(packet, callback.getId(), getPacketRegistry().getPacketIdFromType(packet.getClass()));
             container.validate();
 //            eventLoop.execute(() -> {
@@ -159,7 +159,7 @@ public class FancyClientImpl implements FancyClient {
 
         Callback<P> callback = callbackProvider.create(this, id);
 
-        if (getHandlers().handleOutPacket(this, packet)) {
+        if (getHandlers().handleOutPacket(this, callback, packet)) {
             PacketContainer container = new PacketContainer(packet, callback.getId(), getPacketRegistry().getPacketIdFromType(packet.getClass()));
             container.validate();
 //            eventLoop.execute(() -> {

@@ -7,6 +7,7 @@ import ru.dargen.fancy.handler.context.PacketHandlerContext;
 import ru.dargen.fancy.handler.context.RemoteConnectHandlerContext;
 import ru.dargen.fancy.handler.context.RemoteDisconnectHandlerContext;
 import ru.dargen.fancy.packet.Packet;
+import ru.dargen.fancy.packet.callback.Callback;
 import ru.dargen.fancy.server.FancyRemote;
 
 import java.util.function.Consumer;
@@ -30,14 +31,14 @@ public class HandlersImpl implements Handlers {
             onDisconnect.accept(new RemoteDisconnectHandlerContext(remote));
     }
 
-    public boolean handleOutPacket(FancyRemote remote, Packet packet) {
-        val context = new PacketHandlerContext(remote, packet);
+    public boolean handleOutPacket(FancyRemote remote, Callback<?> callback, Packet packet) {
+        val context = new PacketHandlerContext(remote, callback, packet);
         if (onOutPacket != null) onOutPacket.accept(context);
         return onOutPacket == null || !context.isCancelled();
     }
 
-    public boolean handleInPacket(FancyRemote remote, Packet packet) {
-        val context = new PacketHandlerContext(remote, packet);
+    public boolean handleInPacket(FancyRemote remote, Callback<?> callback, Packet packet) {
+        val context = new PacketHandlerContext(remote, callback, packet);
         if (onInPacket != null) onInPacket.accept(context);
         return onInPacket == null || !context.isCancelled();
     }

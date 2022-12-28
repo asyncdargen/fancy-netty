@@ -4,6 +4,7 @@ import ru.dargen.fancy.handler.context.PacketHandlerContext;
 import ru.dargen.fancy.handler.context.RemoteConnectHandlerContext;
 import ru.dargen.fancy.handler.context.RemoteDisconnectHandlerContext;
 import ru.dargen.fancy.packet.Packet;
+import ru.dargen.fancy.packet.callback.Callback;
 import ru.dargen.fancy.server.FancyRemote;
 
 import java.util.function.Consumer;
@@ -22,8 +23,8 @@ public interface Handlers {
     
     void handleDisconnect(FancyRemote remote);
     
-    boolean handleOutPacket(FancyRemote remote, Packet packet);
+    boolean handleOutPacket(FancyRemote remote, Callback<?> callback, Packet packet);
     
-    boolean handleInPacket(FancyRemote remote, Packet packet);
+    boolean handleInPacket(FancyRemote remote, Callback<?> callback, Packet packet);
 
 }

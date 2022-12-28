@@ -66,7 +66,7 @@ public class FancyRemoteImpl implements FancyRemote {
 
         Callback<P> callback = callbackProvider.create(this);
 
-        if (getHandlers().handleOutPacket(this, packet)) {
+        if (getHandlers().handleOutPacket(this, callback, packet)) {
             PacketContainer container = new PacketContainer(packet, callback.getId(), getPacketRegistry().getPacketIdFromType(packet.getClass()));
             container.validate();
 //            getEventLoop().execute(() -> {
@@ -87,7 +87,7 @@ public class FancyRemoteImpl implements FancyRemote {
 
         Callback<P> callback = callbackProvider.create(this, id);
 
-        if (getHandlers().handleOutPacket(this, packet)) {
+        if (getHandlers().handleOutPacket(this, callback, packet)) {
             PacketContainer container = new PacketContainer(packet, callback.getId(), getPacketRegistry().getPacketIdFromType(packet.getClass()));
             container.validate();
 //            getEventLoop().execute(() -> {
