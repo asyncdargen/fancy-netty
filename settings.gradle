@@ -1,5 +1,4 @@
 rootProject.name = 'fancy'
 
 include 'fancy-netty'
-include 'fancy-rpc'
 
