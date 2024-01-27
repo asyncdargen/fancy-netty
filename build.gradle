@@ -1,58 +1,29 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'java-library'
 }
 
-apply plugin: 'maven-publish'
 
-group 'ru.dargen'
-version '1.9.8'
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'java-library'
 
-repositories {
-    mavenCentral()
-}
+    group 'ru.dargen'
+    version '1.0.0'
 
-dependencies {
-    implementation 'io.netty:netty-all:4.1.77.Final'
-    implementation 'com.github.ben-manes.caffeine:caffeine:2.9.0'
-    implementation 'com.google.guava:guava:30.1.1-jre'
-    implementation 'com.google.code.gson:gson:2.8.6'
-
-    annotationProcessor 'org.projectlombok:lombok:1.18.12'
-    compileOnly 'org.projectlombok:lombok:1.18.12'
-
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
-    testCompileOnly 'org.projectlombok:lombok:1.18.12'
-}
-
-publishing {
     repositories {
-        maven {
-            url 'https://repo.starfarm.fun/public'
-            credentials {
-                username System.getenv('SF_REPO_USER')
-                password System.getenv('SF_REPO_PASSWORD')
-            }
-        }
+        mavenCentral()
 
+        dependencies {
+            compileOnly 'org.projectlombok:lombok:1.18.24'
+            annotationProcessor 'org.projectlombok:lombok:1.18.24'
+        }
     }
 
-    publications {
-        version(MavenPublication) {
-            groupId 'ru.dargen'
-            artifactId 'fancy-netty'
-            version project.version
-            artifact jar
-        }
-        live(MavenPublication) {
-            groupId 'ru.dargen'
-            artifactId 'fancy-netty'
-            version 'live'
-            artifact jar
-        }
+    java {
+        withSourcesJar()
     }
+
+    tasks.withType(JavaCompile)*.options*.encoding = 'UTF-8'
 }
-
-jar.from configurations.runtimeClasspath.collect(project.&zipTree)
-
-tasks.withType(JavaCompile)*.options*.encoding = 'UTF-8'

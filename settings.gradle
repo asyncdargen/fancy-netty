@@ -1,4 +1,5 @@
-rootProject.name = 'fancy-netty'
+rootProject.name = 'fancy'
 
-include 'fancy-netty-kotlin', 'fancy-netty-spring-server'
+include 'fancy-netty'
+include 'fancy-rpc'
 
